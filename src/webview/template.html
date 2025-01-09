@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" vite-plugin-vscode-webview-hmr>
+      const COMMAND_ON_MESSAGE = "vite-plugin-vscode-webview-hmr:onmessage";
+      const COMMAND_ON_UPDATE_STATE = "vite-plugin-vscode-webview-hmr:on-update-state";
+      const COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME = "vite-plugin-vscode-webview-hmr:sync-webview-state-to-iframe";
+
+      const vscodeApi = window.acquireVsCodeApi();
+      // 用于保存 vite-plugin-vscode-webview-hmr 的 iframe 没有 load 之前，extension 发出的消息
+      // Used to save the message sent by the extension before the vite-plugin-vscode-webview-hmr's iframe is loaded
+      const vscodeToWebviewMessageQueue = [];
+      let iframe;
+      let iframeLoaded = false;
+
+      // 将 webview 中 <html> 和 <body> 元素中的部分属性和元素“同步”给 vite-plugin-vscode-webview-hmr 的 iframe 中的 <html> 和 <body> 元素
+      // 'Synchronize' some attributes and elements within the <html> and <body> tags in the webview to the <html> and <body> tags in the iframe of vite-plugin-vscode-webview-hmr.
+      const syncWebviewStateToIframe = () => {
+        const message = {
+          command: COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME,
+          message: {
+            state: vscodeApi.getState(),
+            style: document.getElementById("_defaultStyles").innerHTML,
+            root: {
+              cssText: document.documentElement.style.cssText,
+            },
+            body: {
+              dataset: JSON.parse(JSON.stringify(document.body.dataset)),
+              className: document.body.className,
+              role: document.body.getAttribute("role"),
+            },
+          },
+        };
+        iframe.contentWindow.postMessage(message, "*");
+      };
+
+      // 作用举例：在切换 vscode 的主题时，webview 中的元素（html, body）的属性和内容发生变化，需要监听变化并同步
+      // For example, when switching the theme of VSCode, the attributes and content of elements (html, body) in the webview change. It is necessary to listen for these changes and synchronize them.
+      const observeElementAttributeChange = (element, attributeName, callback) => {
+        const observer = new MutationObserver(function (mutationsList) {
+          for (let mutation of mutationsList) {
+            if (mutation.type === "attributes" && mutation.attributeName === attributeName) {
+              callback(mutation.target.getAttribute(attributeName));
+            }
+          }
+        });
+        observer.observe(element, { attributes: true });
+        return observer;
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        iframe = document.querySelector("#webview-iframe");
+        iframe.addEventListener("load", () => {
+          iframeLoaded = true;
+          syncWebviewStateToIframe();
+          observeElementAttributeChange(document.body, "class", syncWebviewStateToIframe);
+          vscodeToWebviewMessageQueue.forEach((message) => iframe.contentWindow.postMessage(message, "*"));
+        });
+      });
+
+      // 用于同步 extension 和 vite-plugin-vscode-webview-hmr 的 iframe 之间的通讯
+      // Used for synchronizing communication between the iframe of extension and vite-plugin-vscode-webview-hmr.
+      window.addEventListener(
+        "message",
+        (event) => {
+          const data = event.data;
+          const serverURL = new URL("__SERVER_URL__");
+          const originURL = new URL(event.origin || event.originalEvent.origin || "");
+
+          if (originURL.origin === serverURL.origin) {
+            const { command, message } = data || {};
+            if (command === COMMAND_ON_MESSAGE) {
+              vscodeApi.postMessage(message);
+            } else if (command === COMMAND_ON_UPDATE_STATE) {
+              vscodeApi.setState(message);
+            }
+          } else if (originURL.origin.startsWith("vscode-webview://")) {
+            if (iframeLoaded) {
+              iframe.contentWindow.postMessage(data, "*");
+            } else {
+              vscodeToWebviewMessageQueue.push(data);
+            }
+          }
+        },
+        false,
+      );
+    </script>
+  </head>
+  <body>
+    <iframe
+      id="webview-iframe"
+      frameborder="0"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads"
+      allow="cross-origin-isolated; autoplay; clipboard-read; clipboard-write"
+      src="__SERVER_URL__"
+    ></iframe>
+  </body>
+  <footer>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      #webview-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .outer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </footer>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "vscode-extension-vue-pages",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:watch": "vite build --watch"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.6.5",
+    "element-plus": "^2.5.1",
+    "pinia": "^2.1.7",
+    "vue": "^3.3.11",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@types/path-browserify": "^1.0.3",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "@vue/tsconfig": "^0.4.0",
+    "sass": "^1.69.7",
+    "scss": "^0.2.4",
+    "vite": "^5.0.8",
+    "vite-plugin-vscode-webview-hmr": "workspace:^"
+  }
+}

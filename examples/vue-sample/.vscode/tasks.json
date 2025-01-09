@@ -1,0 +1,20 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev", // 由于npm run dev中使用了concurrently会导致卡住，弹不出扩展开发宿主。而仅仅使用npm run watch只能保证插件src目录下的代码变更了能重编，而不能满足webview-ui变更以后重编。所以综合考虑，暂不配置task.json中的preLaunchTask选项，改为用户在终端中手动执行，npm run dev
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

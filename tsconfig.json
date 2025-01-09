@@ -1,0 +1,19 @@
+{
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "target": "ES2021",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "noEmit": false,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true
+  }
+}

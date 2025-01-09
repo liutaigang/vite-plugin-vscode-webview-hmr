@@ -1,0 +1,58 @@
+{
+  "name": "vite-plugin-vscode-webview-hmr",
+  "version": "0.0.1",
+  "description": "Support the development of VSCode WebView with Hot Module Replacement (HMR)",
+  "keywords": [
+    "vite",
+    "plugin",
+    "vscode",
+    "hmr",
+    "extension",
+    "webview"
+  ],
+  "author": {
+    "name": "liutaigang",
+    "email": "liutaigang123@gmail.com"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "packageManager": "pnpm@9.1.4",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:liutaigang/vite-plugin-vscode-webview-hmr.git"
+  },
+  "scripts": {
+    "dev": "pnpm clean && tsup --watch",
+    "build": "pnpm clean && tsup",
+    "clean": "rimraf ./dist",
+    "prettier": "prettier --write .",
+    "prepare": "husky"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "18.19.67",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "typescript": "~5.3.3",
+    "vite": "^5.4.11",
+    "tsup": "7.2.0"
+  },
+  "peerDependencies": {
+    "vite": ">=2"
+  }
+}

@@ -1,0 +1,52 @@
+{
+	"name": "vue-sample",
+	"description": "vue-sample",
+	"version": "0.0.1",
+	"publisher": "candywall",
+	"private": true,
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onWebviewPanel:catCoding"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "vue3-webview.open",
+				"title": "open vue page"
+			}
+		]
+	},
+	"scripts": {
+		"install:all": "npm i && cd webview-ui && npm i",
+		"vscode:prepublish": "del-cli out -f && npm run compile && cd webview-ui && npm run build",
+		"dev": "concurrently \"npm run dev:webview\" \"npm run watch\"",
+		"dev:web": "cd webview-ui && npm run dev",
+		"compile": "tsc -p ./",
+		"lint": "eslint \"src/**/*.ts\"",
+		"watch": "tsc -w -p ./",
+		"dev:webview": "cd webview-ui && npm run dev"
+	},
+	"dependencies": {
+		"path-browserify": "^1.0.1",
+		"node-html-parser": "^6.1.13"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.1",
+		"@types/vscode": "^1.73.0",
+		"@types/vscode-webview": "^1.57.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"del-cli": "^5.1.0",
+		"eslint": "^8.26.0",
+		"typescript": "^5.0.2",
+		"vite": "^5.2.8",
+		"concurrently": "^8.2.2"
+	}
+}
