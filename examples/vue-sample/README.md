@@ -1,15 +1,17 @@
-# vscode-extension-webview-vue3-sample 项目模板
+# Vite-plugin-vscode-webview-hmr's vue3 + vite project template
 
-使用 vue3 + vite 来开发 vscode-extension 的 webview，可以使用 vue3 单文件组件，组合式 API 语法进行开发。
+Use vue3 + vite to develop webview of vscode-extension, and **use vite-plugin-vscode-webview-hmr** plug-in to implement hot update of webview development mode
 
-## 用法
+## Usage
 
-第一次执行`npm run install:all`命令安装依赖
+Execute the `pnpm i` command for the first time to install dependencies
 
-先执行`npm run dev`命令编译项目并监听变更
+First execute the `npm run dev` command to compile the project and monitor changes
 
-再按 F5 运行插件，webview-ui 下的变更可以通过重新加载 webview 界面看到，src 下的变更，可以通过重新加载扩展窗口（快捷键：Ctrl + R）看到
+Enable debugging for this example and execute the command: `vue3-webview.open`
 
-单独调试webview-ui，执行`npm run dev:web`
+Modify the code of the view in webview-ui/src to see real-time changes in the view in the debugging window
 
-本项目参考 [vscode-webview-vite-vue-boilerplate](https://github.com/crper/vscode-webview-vite-vue-boilerplate) 项目开发
+## refer to
+
+This sample refers to the [vscode-extension-webview-vue-sample](https://github.com/TangGuoNiuBi/vscode-extension-webview-vue-sample)

@@ -6,12 +6,10 @@ export default defineConfig(() => {
     {
       entry: ["src/index.ts"],
       format: ["esm", "cjs"],
-      target: ["es2021", "node16"],
       external: ["vite"].concat(Object.keys(pkg.dependencies || {})),
-      shims: true,
+      splitting: false,
       clean: false,
       dts: true,
-      splitting: true,
       loader: {
         ".html": "text",
       },

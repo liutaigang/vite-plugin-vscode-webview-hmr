@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { vscode } from "../utils/vscode";
 import { resolveWebviewUrl } from "../utils/resolveWebviewUrl";
 import { reactive, ref } from "vue";
@@ -54,13 +54,12 @@ const rules = reactive({
   ],
 });
 
-import useRouterStore from "../store/useUserStore";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const submitForm = async (formEl) => {
+const submitForm = async (formEl: any) => {
   if (!formEl) return;
-  await formEl.validate(async (valid, fields) => {
+  await formEl.validate(async () => {
     // 跳转到首页
     router.push("/mainbox");
     vscode.postMessage({
@@ -70,7 +69,7 @@ const submitForm = async (formEl) => {
   });
 };
 
-const resetForm = (formEl) => {
+const resetForm = (formEl: any) => {
   if (!formEl) return;
   formEl.resetFields();
 };

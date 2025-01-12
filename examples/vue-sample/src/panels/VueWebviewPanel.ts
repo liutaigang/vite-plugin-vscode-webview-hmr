@@ -107,11 +107,17 @@ export class VueWebviewPanel {
     const htmlPath = path.join(extensionUri.fsPath, "out", "webview", "index.html");
     const htmlText = fs.readFileSync(htmlPath, { encoding: "utf8" }).toString();
 
-    // 需要在前端应用中插入的脚本，目的是：将上述 webviewUri 所指的目录告知前端应用，前端应用在定位资源时需要
+    /**
+     * 判断 index.html 文本中是否包含 VSCODE_WEBVIEW_HMR_MARK， 如果包含的话，webview 处于开发模式，并使用了 vite-plugin-vscode-webview-hmr 插件，否则，处于生产模式
+     * Check whether the index.html text contains VSCODE_WEBVIEW_HMR_MARK. If yes, webview is in development mode and uses the vite-plugin-vscode-webview-hmr plug-in; otherwise, it is in production mode
+     */
     if (htmlText.includes(VSCODE_WEBVIEW_HMR_MARK)) {
       return htmlText;
     } else {
-      // 使用 html-modifier 库来处理读取的内容，主要的作用是：1、将 script、link 标签中的 src、href 的值，重新赋予正确的值，2、将上述 injectInContent 的内容插入读取的内容中
+      /**
+       * 主要的作用是：1、将 script、link 标签中的 src、href 的值，重新赋予正确的路径值，2、将上述 injectScript 的内容插入 index.html 中
+       * The main functions are as follows: 1. Reassign the script, src, and href values in the link tag to the correct path values; 2. Insert the above injectScript contents into index.html
+       */
       const webviewUri = getUri(webview, extensionUri, ["out", "webview"]);
       const injectScript = `<script id="_webviewUrlScript"> window.__WEBVIEW_URL__ = "${webviewUri.toString()}"</script>`;
       const modifiedHtml = handleIndexHtml(htmlText, { webviewUri, injectScripts: [injectScript] });

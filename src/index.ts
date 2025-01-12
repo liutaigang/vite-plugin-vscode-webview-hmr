@@ -5,14 +5,16 @@ import { resolveServerUrl } from "./utils";
 import { resolveTemplate } from "./webview/template";
 import { insertVscodeScriptToHtml } from "./webview/vscode-script";
 
-export function usePlugin(): PluginOption {
+export type Options = {};
+
+export default function usePlugin(rawOptions: Options = {}): PluginOption {
   let outDir: string;
   return [
     {
       name: "vite-plugin-vscode-webview-hmr",
       apply: "serve",
       configResolved(config) {
-        outDir = path.resolve(config.root, config.build.outDir);
+        outDir = path.join(config.root, config.build.outDir);
       },
       configureServer(server) {
         if (!server || !server.httpServer) {
@@ -21,7 +23,7 @@ export function usePlugin(): PluginOption {
         server.httpServer?.once("listening", async () => {
           const serverUrl = resolveServerUrl(server)!;
           const indexContent = resolveTemplate({ serverUrl });
-          const indexPath = path.resolve(outDir, "index.html");
+          const indexPath = path.join(outDir, "index.html");
           if (!fs.existsSync(outDir)) {
             fs.mkdirSync(outDir, { recursive: true });
           }
@@ -35,5 +37,3 @@ export function usePlugin(): PluginOption {
     },
   ];
 }
-
-export default usePlugin;

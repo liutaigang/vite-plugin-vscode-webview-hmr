@@ -1,16 +1,16 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-const useUserStore = defineStore('user', () => {
-    const user = ref({})
-    function changeUser(value: string) {
-        user.value = value
-    }
+const useUserStore = defineStore("user", () => {
+  const user = ref({});
+  function changeUser(value: string) {
+    user.value = value;
+  }
 
-    return {
-        user,
-        changeUser
-    }
-})
+  return {
+    user,
+    changeUser,
+  };
+});
 
-export default useUserStore
+export default useUserStore;

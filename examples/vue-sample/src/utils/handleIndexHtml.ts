@@ -7,12 +7,15 @@ export type HandleIndexHtmlOptions = {
   injectScripts?: string[];
 };
 /**
- * 
- * @param html 
- * @param options 
- * @returns 
+ * The main functions of handling the index.html script of the webview are:
+ * 1. Insert a script wrapped in <script> tags
+ * 2. Modify the attributes of the <link> and <script>.
+ *
+ * @param html the index.html script
+ * @param options options
+ * @returns the modified index.html
  */
-export function handleIndexHtml(html: string, options: HandleIndexHtmlOptions) {
+export function handleIndexHtml(html: string, options: HandleIndexHtmlOptions): string {
   const { webviewUri, injectScripts = [] } = options;
   const root = htmlParser(html);
 

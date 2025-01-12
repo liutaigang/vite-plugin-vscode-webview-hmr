@@ -1,19 +1,18 @@
 {
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "include": ["./src/"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "module": "ESNext",
-    "target": "ES2021",
-    "strict": true,
-    "esModuleInterop": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
-    "noImplicitAny": false,
-    "resolveJsonModule": true,
-    "noEmit": false,
-    "baseUrl": ".",
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   }
 }
