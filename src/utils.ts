@@ -1,4 +1,5 @@
 import type { AddressInfo } from "node:net";
+import { URL } from "node:url";
 import type { ViteDevServer } from "vite";
 
 /**
@@ -11,7 +12,7 @@ export function resolveHostname(hostname: string) {
   return loopbackHosts.has(hostname) || wildcardHosts.has(hostname) ? "localhost" : hostname;
 }
 
-export function resolveServerUrl(server: ViteDevServer) {
+export function resolveServerUrl(server: ViteDevServer, pathname = "") {
   const addressInfo = server.httpServer!.address();
   const isAddressInfo = (x: any): x is AddressInfo => x?.address;
 
@@ -23,9 +24,9 @@ export function resolveServerUrl(server: ViteDevServer) {
     const protocol = options.https ? "https" : "http";
     const devBase = server.config.base;
 
-    const path = typeof options.open === "string" ? options.open : devBase;
-    const url = path.startsWith("http") ? path : `${protocol}://${hostname}:${port}${path}`;
-
+    const openOrBase = typeof options.open === "string" ? options.open : devBase;
+    const origin = openOrBase.startsWith("http") ? openOrBase : `${protocol}://${hostname}:${port}${openOrBase}`;
+    const url = new URL(pathname, origin).toString();
     return url;
   }
 }

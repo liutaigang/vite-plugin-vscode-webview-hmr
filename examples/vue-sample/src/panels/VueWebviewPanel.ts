@@ -66,7 +66,7 @@ export class VueWebviewPanel {
           enableScripts: true,
           retainContextWhenHidden: true,
           // Restrict the webview to only load resources from the `out` and `webview-ui/dist` directories
-          localResourceRoots: [Uri.joinPath(extensionUri, "out"), Uri.joinPath(extensionUri, "webview-ui/dist")],
+          localResourceRoots: [Uri.joinPath(extensionUri, "out")],
         },
       );
 

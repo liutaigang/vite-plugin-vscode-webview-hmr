@@ -59,5 +59,8 @@
   },
   "peerDependencies": {
     "vite": ">=2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown ."
   }
 }

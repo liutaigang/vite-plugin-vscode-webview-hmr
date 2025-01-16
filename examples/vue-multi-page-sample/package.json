@@ -1,0 +1,51 @@
+{
+  "name": "vue-sample",
+  "description": "vue-sample",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vue-multi-page-sample.main-page.open",
+        "title": "open webviewPanelMain page"
+      },
+      {
+        "command": "vue-multi-page-sample.about-page.open",
+        "title": "open webviewPanelAbout page"
+      },
+      {
+        "command": "vue-multi-page-sample.sign-page.open",
+        "title": "open webviewPanelSign page"
+      }
+    ]
+  },
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:web": "cd webview-ui && pnpm run dev",
+    "dev:ext": "pnpm run watch",
+    "build": "run-p build:*",
+    "build:web": "cd webview-ui && pnpm run build",
+    "build:ext": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -w -p ./"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.1",
+    "@types/vscode": "^1.73.0",
+    "@types/vscode-webview": "^1.57.0",
+    "del-cli": "^5.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^5.2.8"
+  }
+}

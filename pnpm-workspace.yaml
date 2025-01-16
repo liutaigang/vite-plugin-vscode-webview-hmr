@@ -1,3 +1,4 @@
 packages:
   - "examples/*"
   - "examples/vue-sample/*"
+  - "examples/vue-multi-page-sample/*"
