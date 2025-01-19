@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      node-html-parser:
+        specifier: ^6.1.13
+        version: 6.1.13
     devDependencies:
       '@types/node':
         specifier: 18.19.67

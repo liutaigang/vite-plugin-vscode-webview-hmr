@@ -56,6 +56,6 @@ export const vscodeScript = `
     delete window.frameElement;
 </script>`;
 
-export const insertVscodeScriptToHtml = (html: string): string => {
-  return html.replace(/<head>/i, `<head>${vscodeScript}`);
-};
+export function getVscodeScript() {
+  return vscodeScript;
+}

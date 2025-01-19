@@ -37,8 +37,8 @@
         iframe.contentWindow.postMessage(message, "*");
       };
 
-      // 作用举例：在切换 vscode 的主题时，webview 中的元素（html, body）的属性和内容发生变化，需要监听变化并同步
-      // For example, when switching the theme of VSCode, the attributes and content of elements (html, body) in the webview change. It is necessary to listen for these changes and synchronize them.
+      // 在切换 vscode 的主题时，webview 中的元素（html, body）的属性和内容发生变化，需要监听变化并同步
+      // When switching the theme of VSCode, the attributes and content of elements (html, body) in the webview change. It is necessary to listen for these changes and synchronize them.
       const observeElementAttributeChange = (element, attributeName, callback) => {
         const observer = new MutationObserver(function (mutationsList) {
           for (let mutation of mutationsList) {
