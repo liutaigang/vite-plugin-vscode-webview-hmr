@@ -5,7 +5,14 @@ import vscodeWebviewHmr from "vite-plugin-vscode-webview-hmr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vscodeWebviewHmr()],
+  plugins: [
+    vue(),
+    vscodeWebviewHmr({
+      logDir: "./log",
+      indexScript: "<script>  console.log('=======hello index========') </script>",
+      iframeScript: "<script> console.log('-------hello iframe-------') </script>",
+    }),
+  ],
   build: {
     outDir: "../out/webview",
     rollupOptions: {

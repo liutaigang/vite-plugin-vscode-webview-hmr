@@ -1,17 +1,19 @@
-# Vite-plugin-vscode-webview-hmr's vue3 + vite project template
+# Vue 3 + Vite Single-Page Template
 
-Use vue3 + vite to develop webview of vscode-extension, and **use vite-plugin-vscode-webview-hmr** plug-in to implement hot update of webview development mode
+**English** | [中文](./README.zh_CN.md)
+
+Hot updates in the development mode using the **vite-plugin-vscode-webview-hmr** plugin
 
 ## Usage
 
-Execute the `pnpm i` command for the first time to install dependencies
+Run the `pnpm i` command for the first time to install dependencies.
 
-First execute the `npm run dev` command to compile the project and monitor changes
+First, execute the `npm run dev` command to compile the project and monitor changes.
 
-Enable debugging for this example and execute the command: `vue3-webview.open`
+To enable debugging for this example, execute the command: `vue3-webview.open`.
 
-Modify the code of the view in webview-ui/src to see real-time changes in the view in the debugging window
+Modify the code of the view in the ./webview-ui/ directory, and you can see the real-time changes of the view in the debug window.
 
-## refer to
+## Reference
 
-This sample refers to the [vscode-extension-webview-vue-sample](https://github.com/TangGuoNiuBi/vscode-extension-webview-vue-sample)
+This example references [vscode-extension-webview-vue-sample](https://github.com/TangGuoNiuBi/vscode-extension-webview-vue-sample)

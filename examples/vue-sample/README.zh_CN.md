@@ -1,6 +1,8 @@
-# Vite-plugin-vscode-webview-hmr 的 vue3 + vite 项目模板
+# vue3 + vite 单页面模板
 
-使用 vue3 + vite 来开发 vscode-extension 的 webview，并使用 vite-plugin-vscode-webview-hmr 插件实现 webview 开发模式的热更新
+[English](./README.md) | **中文**
+
+使用 **vite-plugin-vscode-webview-hmr** 插件开发模式的热更新
 
 ## 用法
 
