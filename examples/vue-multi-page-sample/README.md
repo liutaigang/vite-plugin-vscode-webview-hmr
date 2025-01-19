@@ -13,7 +13,3 @@ First, execute the `npm run dev` command to compile the project and monitor chan
 To enable debugging for this example, execute the command: `vue-multi-page-sample.main-page.open`.
 
 Modify the code of the view in the ./webview-ui/ directory, and you can see the real-time changes of the view in the debug window.
-
-## Reference
-
-This example references [vscode-extension-webview-vue-sample](https://github.com/TangGuoNiuBi/vscode-extension-webview-vue-sample)
