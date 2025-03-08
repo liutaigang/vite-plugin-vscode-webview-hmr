@@ -6,13 +6,13 @@ Hot updates in the development mode using the **vite-plugin-vscode-webview-hmr**
 
 ## Usage
 
-Run the `pnpm i` command for the first time to install dependencies.
+For the first run, in the top-level workspace, execute the `pnpm i` command to install dependencies, and then run `npm run build` to package the plugin code.
 
-First, execute the `npm run dev` command to compile the project and monitor changes.
+In the current workspace, execute the `npm run dev` command to compile the project and monitor changes.
 
-To enable debugging for this example, execute the command: `vue3-webview.open`.
+Press F5 to start debugging this sample and execute the command: `vue-multi-page-sample.main-page.open`
 
-Modify the code of the view in the ./webview-ui/ directory, and you can see the real-time changes of the view in the debug window.
+Modify the code of the view in the `./webview-ui/` directory, and you will be able to see the real-time changes of the view in the debug window.
 
 ## Reference
 

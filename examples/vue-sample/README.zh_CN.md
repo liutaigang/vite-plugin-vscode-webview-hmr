@@ -6,11 +6,11 @@
 
 ## 用法
 
-第一次，执行 `pnpm i` 命令安装依赖
+第一次运行，在顶层的工作空间下，执行 `pnpm i` 命令安装依赖，再执行 `npm run build` 打包插件代码
 
-先执行 `npm run dev` 命令编译项目并监听变更
+在当前的工作空间下执行 `npm run dev` 命令编译项目并监听变更
 
-开启本示例的调试，执行指令：`vue3-webview.open`
+按 F5 开启本示例的调试，执行指令：`vue-multi-page-sample.main-page.open`
 
 修改 ./webview-ui/ 中视图的代码，即可看到调试窗口中的视图的实时变化
 

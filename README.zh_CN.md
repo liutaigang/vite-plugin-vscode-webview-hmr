@@ -54,6 +54,8 @@ vue3 + vite 的单页面示例：[vue-sample](https://github.com/liutaigang/vite
 
 vue3 + vite 的多页面示例：[vue-multi-page-sample](https://github.com/liutaigang/vite-plugin-vscode-webview-hmr/tree/main/examples/vue-multi-page-sample)
 
+其他示例：[vscode-webview-extension-example](https://github.com/liutaigang/vscode-webview-extension-example)
+
 ## 参考
 
 本项目部分代码参考 [vite-plugin-vscode](https://github.com/tomjs/vite-plugin-vscode) 开发，特此感谢。

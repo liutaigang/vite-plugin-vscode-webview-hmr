@@ -54,6 +54,8 @@ Single-page example with Vue 3 + Vite: [vue-sample](https://github.com/liutaigan
 
 Multi-page example with Vue 3 + Vite: [vue-multi-page-sample](https://github.com/liutaigang/vite-plugin-vscode-webview-hmr/tree/main/examples/vue-multi-page-sample)
 
+Other example: [vscode-webview-extension-example](https://github.com/liutaigang/vscode-webview-extension-example)
+
 ## References
 
 Part of the code for this project is based on the development of [vite-plugin-vscode](https://github.com/tomjs/vite-plugin-vscode). Special thanks.
