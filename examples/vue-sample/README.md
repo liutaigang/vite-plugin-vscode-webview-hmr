@@ -10,7 +10,7 @@ For the first run, in the top-level workspace, execute the `pnpm i` command to i
 
 In the current workspace, execute the `npm run dev` command to compile the project and monitor changes.
 
-Press F5 to start debugging this sample and execute the command: `vue-multi-page-sample.main-page.open`
+Press F5 to start debugging this sample and execute the command: `vue3-webview.open`
 
 Modify the code of the view in the `./webview-ui/` directory, and you will be able to see the real-time changes of the view in the debug window.
 
