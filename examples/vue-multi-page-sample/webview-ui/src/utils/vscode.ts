@@ -37,6 +37,17 @@ class VSCodeAPIWrapper {
   }
 
   /**
+   * Listening message from the owner of the webview.
+   *
+   * @param handler message handler
+   */
+  listeningMessage(handler: (data: any, event?: MessageEvent<any>) => void) {
+    window.addEventListener("message", (event) => {
+      handler(event.data, event);
+    });
+  }
+
+  /**
    * Get the persistent state stored for this webview.
    *
    * @remarks When running webview source code inside a web browser, getState will retrieve state

@@ -41,22 +41,6 @@ export class Logger {
   }
 
   private format(level: LogLevel, date: Date, message: string) {
-    return [level, " [", date.toLocaleString(), "] ", message].join("");
-  }
-}
-
-export function createLogger(logFilePath: string, enable = true): Logger {
-  if (enable) {
-    const { dir } = path.parse(logFilePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-    return new Logger(logFilePath);
-  } else {
-    return new Proxy({} as any, {
-      get: function () {
-        return () => {};
-      },
-    }) as Logger;
+    return [`[${level.toUpperCase()}] `, `(${date.toLocaleString()}) `, message.trim()].join("");
   }
 }

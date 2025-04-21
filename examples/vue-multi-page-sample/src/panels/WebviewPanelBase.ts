@@ -1,8 +1,9 @@
-import { Disposable, Webview, WebviewPanel, Uri, ExtensionContext } from "vscode";
+import { Disposable, Webview, Uri, ExtensionContext } from "vscode";
 import path from "node:path";
 import fs from "node:fs";
 import { getUri } from "../utils/getUri";
 import { handleIndexHtml } from "../utils/handleIndexHtml";
+import { injectScriptToHtml } from "../utils/injectScriptToHtml";
 
 const VSCODE_WEBVIEW_HMR_MARK = "vite-plugin-vscode-webview-hmr";
 
@@ -44,21 +45,15 @@ export abstract class WebviewPanelBase {
    */
   protected _getWebviewContent(webview: Webview, extensionUri: Uri, outDir: string, entryPath: string): string {
     const htmlPath = path.join(extensionUri.fsPath, entryPath);
-    const htmlText = fs.readFileSync(htmlPath, { encoding: "utf8" }).toString();
+    const webviewUri = getUri(webview, extensionUri, [outDir]);
+    let htmlText = fs.readFileSync(htmlPath, { encoding: "utf8" }).toString();
 
-    /**
-     * Check whether the index.html text contains VSCODE_WEBVIEW_HMR_MARK
-     */
-    if (htmlText.includes(VSCODE_WEBVIEW_HMR_MARK)) {
-      return htmlText;
-    } else {
-      /**
-       * The main functions are as follows: 1. Reassign the script, src, and href values in the link tag to the correct path values; 2. Insert the above injectScript contents into index.html
-       */
-      const webviewUri = getUri(webview, extensionUri, [outDir]);
-      const injectScript = `<script id="_webviewUrlScript"> window.__WEBVIEW_URL__ = "${webviewUri.toString()}"</script>`;
-      const modifiedHtml = handleIndexHtml(htmlText, { webviewUri, injectScripts: [injectScript] });
-      return modifiedHtml;
+    const injectScript = `<script id="_webviewUrlScript"> window.__WEBVIEW_URL__ = "${webviewUri.toString()}"</script>`;
+    htmlText = injectScriptToHtml(htmlText, [injectScript]);
+
+    if (!htmlText.includes(VSCODE_WEBVIEW_HMR_MARK)) {
+      htmlText = handleIndexHtml(htmlText, webviewUri);
     }
+    return htmlText;
   }
 }

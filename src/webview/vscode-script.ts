@@ -1,5 +1,5 @@
 export const vscodeScript = `
-<script id="_vscodeApiScript" vite-plugin-vscode-webview-hmr>
+<script id="_vscodeApiScript">
     const COMMAND_ON_MESSAGE = 'vite-plugin-vscode-webview-hmr:onmessage';
     const COMMAND_ON_UPDATE_STATE = 'vite-plugin-vscode-webview-hmr:on-update-state';
     const COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME = "vite-plugin-vscode-webview-hmr:sync-webview-state-to-iframe";
@@ -7,6 +7,7 @@ export const vscodeScript = `
     // 处理 webview 发来的 html 和 body 元素的信息
     // Process the html and body element information sent by webview
     window.addEventListener('message', function messageHandler(event) {
+        event.stopPropagation();
         const { command, message } = event.data;
         if (command === COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME) {
            const { style, body, root } = message;
@@ -22,7 +23,7 @@ export const vscodeScript = `
            defaultStylesElement.textContent = style;
            document.head.appendChild(defaultStylesElement);
         }
-    });
+    }, true);
 
     // 模仿 webview 的 acquireVsCodeApi 方法
     // Imitate the acquireVsCodeApi method of webview

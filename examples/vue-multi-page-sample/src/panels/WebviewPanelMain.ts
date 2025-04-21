@@ -29,11 +29,24 @@ export class WebviewPanelMain extends WebviewPanelBase {
 
       this._setWebviewMessageListener(this.currentPanel.webview);
 
+      const timer = setInterval(() => {
+        const message = {
+          command: "dateProductor",
+          payload: new Date(),
+        };
+        this.currentPanel?.webview.postMessage(message);
+      }, 1_000);
+
       this.currentPanel.onDidDispose(() => {
         this.currentPanel = undefined;
       });
 
-      const panelDisaposable = { dispose: () => this.currentPanel?.dispose() };
+      const panelDisaposable = {
+        dispose: () => {
+          this.currentPanel?.dispose();
+          clearTimeout(timer);
+        },
+      };
       this._disposables.push(panelDisaposable);
     }
   }

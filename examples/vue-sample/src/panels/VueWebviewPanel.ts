@@ -3,6 +3,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { getUri } from "../utils/getUri";
 import { handleIndexHtml } from "../utils/handleIndexHtml";
+import { injectScriptToHtml } from "../utils/injectScriptToHtml";
 
 const VSCODE_WEBVIEW_HMR_MARK = "vite-plugin-vscode-webview-hmr";
 
@@ -105,24 +106,16 @@ export class VueWebviewPanel {
    */
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
     const htmlPath = path.join(extensionUri.fsPath, "out", "webview", "index.html");
-    const htmlText = fs.readFileSync(htmlPath, { encoding: "utf8" }).toString();
+    const webviewUri = getUri(webview, extensionUri, ["out", "webview"]);
+    let htmlText = fs.readFileSync(htmlPath, { encoding: "utf8" }).toString();
 
-    /**
-     * 判断 index.html 文本中是否包含 VSCODE_WEBVIEW_HMR_MARK， 如果包含的话，webview 处于开发模式，并使用了 vite-plugin-vscode-webview-hmr 插件，否则，处于生产模式
-     * Check whether the index.html text contains VSCODE_WEBVIEW_HMR_MARK. If yes, webview is in development mode and uses the vite-plugin-vscode-webview-hmr plug-in; otherwise, it is in production mode
-     */
-    if (htmlText.includes(VSCODE_WEBVIEW_HMR_MARK)) {
-      return htmlText;
-    } else {
-      /**
-       * 主要的作用是：1、将 script、link 标签中的 src、href 的值，重新赋予正确的路径值，2、将上述 injectScript 的内容插入 index.html 中
-       * The main functions are as follows: 1. Reassign the script, src, and href values in the link tag to the correct path values; 2. Insert the above injectScript contents into index.html
-       */
-      const webviewUri = getUri(webview, extensionUri, ["out", "webview"]);
-      const injectScript = `<script id="_webviewUrlScript"> window.__WEBVIEW_URL__ = "${webviewUri.toString()}"</script>`;
-      const modifiedHtml = handleIndexHtml(htmlText, { webviewUri, injectScripts: [injectScript] });
-      return modifiedHtml;
+    const injectScript = `<script id="_webviewUrlScript"> window.__WEBVIEW_URL__ = "${webviewUri.toString()}"</script>`;
+    htmlText = injectScriptToHtml(htmlText, [injectScript]);
+
+    if (!htmlText.includes(VSCODE_WEBVIEW_HMR_MARK)) {
+      htmlText = handleIndexHtml(htmlText, webviewUri);
     }
+    return htmlText;
   }
 
   /**

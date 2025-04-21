@@ -3,16 +3,35 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vscodeWebviewHmr from "vite-plugin-vscode-webview-hmr";
 
+const inframeConfig = {
+  mode: "iframe",
+  logDir: "./log",
+  indexScript: `
+    <script>
+      setTimeout(() => {
+        const { safeSendMessageToFrontendView } = window["__vite-plugin-vscode-webview-hmr-devtools__"];
+        safeSendMessageToFrontendView({command: "vite-plugin-vscode-webview-hmr:custom", message: 'nihao frontend view'});
+      })
+    </script>`,
+  iframeScript: `
+    <script>
+      window.addEventListener('message', (event) => {
+        const { command, message } = event.data;
+        if (command === "vite-plugin-vscode-webview-hmr:custom") {
+          console.log(message);
+        }
+      });
+    </script>`,
+};
+
+const nativeConfig = {
+  logDir: "./log",
+  linkDir: "src/assets",
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vscodeWebviewHmr({
-      logDir: "./log",
-      indexScript: "<script>  console.log('=======hello index========') </script>",
-      iframeScript: "<script> console.log('-------hello iframe-------') </script>",
-    }),
-  ],
+  plugins: [vue(), vscodeWebviewHmr(nativeConfig)],
   build: {
     outDir: "../out/webview",
     rollupOptions: {
@@ -20,7 +39,6 @@ export default defineConfig({
         main: path.resolve(__dirname, "./index.html"),
         sign: path.resolve(__dirname, "./sign.html"),
         about: path.resolve(__dirname, "./about.html"),
-        other: path.resolve(__dirname, "./src/pages/other/index.html"),
       },
       output: {
         entryFileNames: "[name]-[hash].js",

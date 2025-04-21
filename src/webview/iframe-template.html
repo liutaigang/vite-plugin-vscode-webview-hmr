@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta vite-plugin-vscode-webview-hmr mode="iframe" />
+    <script type="module">
+      const COMMAND_ON_MESSAGE = "vite-plugin-vscode-webview-hmr:onmessage";
+      const COMMAND_ON_UPDATE_STATE = "vite-plugin-vscode-webview-hmr:on-update-state";
+      const COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME = "vite-plugin-vscode-webview-hmr:sync-webview-state-to-iframe";
+      const PLUGIN_CUSTOM_SCRIPT_TOOLS = "__vite-plugin-vscode-webview-hmr-devtools__";
+
+      const iframe = document.querySelector("#webview-iframe");
+      const vscodeApi = window.acquireVsCodeApi();
+
+      /* 结构：VscodeWebview  --(我们在这里)--  Iframe ----  Frontend View */
+
+      /* 可以在自定义脚本中使用的工具函数 */
+      const listeningIframeLoad = (callback) => {
+        iframe.addEventListener("load", () => callback());
+      };
+      const safeSendMessageToFrontendView = (message) => {
+        window.__iframeLoaded__
+          ? iframe.contentWindow.postMessage(message, "*")
+          : listeningIframeLoad(() => {
+              window.__iframeLoaded__ = true;
+              iframe.contentWindow.postMessage(message, "*");
+            });
+      };
+      const observeElementAttributeChange = (element, attributeName, callback) => {
+        const observer = new MutationObserver(function (mutationsList) {
+          for (let mutation of mutationsList) {
+            if (mutation.type === "attributes" && mutation.attributeName === attributeName) {
+              callback(mutation.target.getAttribute(attributeName));
+            }
+          }
+        });
+        observer.observe(element, { attributes: true });
+        return observer;
+      };
+      const listeningMessageFromFrontendView = (callback) => {
+        window.addEventListener("message", (event) => {
+          const serverURL = new URL("__SERVER_URL__");
+          const originURL = new URL(event.origin || "");
+          if (originURL.origin === serverURL.origin) {
+            callback(event.data);
+          }
+        });
+      };
+      const listeningMessageFromVsWebview = (callback) => {
+        window.addEventListener("message", (event) => {
+          if (event.origin.startsWith("vscode-webview://")) {
+            callback(event.data);
+          }
+        });
+      };
+
+      /* 将这些工具函数放在 window 中，给自定义脚本用 */
+      window[PLUGIN_CUSTOM_SCRIPT_TOOLS] = {
+        listeningIframeLoad,
+        safeSendMessageToFrontendView,
+        observeElementAttributeChange,
+        listeningMessageFromFrontendView,
+        listeningMessageFromVsWebview,
+      };
+
+      // 将 webview 中 <html> 和 <body> 元素中的部分属性和元素同步给 “前端”。在切换 vscode 的主题时，也需要监听变化并同步
+      const syncWebviewStateToView = () => {
+        const message = {
+          command: COMMAND_SYNC_WEBVIEW_STATE_TO_IFRAME,
+          message: {
+            state: vscodeApi.getState(),
+            style: document.getElementById("_defaultStyles").innerHTML,
+            root: {
+              cssText: document.documentElement.style.cssText,
+            },
+            body: {
+              dataset: JSON.parse(JSON.stringify(document.body.dataset)),
+              className: document.body.className,
+              role: document.body.getAttribute("role"),
+            },
+          },
+        };
+        safeSendMessageToFrontendView(message);
+      };
+      syncWebviewStateToView();
+      observeElementAttributeChange(document.body, "class", syncWebviewStateToView);
+
+      // 用于同步 extension 和 前端 之间的通讯
+      listeningMessageFromFrontendView((data) => {
+        const { command, message } = data || {};
+        if (command === COMMAND_ON_MESSAGE) {
+          vscodeApi.postMessage(message);
+        } else if (command === COMMAND_ON_UPDATE_STATE) {
+          vscodeApi.setState(message);
+        }
+      });
+      listeningMessageFromVsWebview((data) => {
+        safeSendMessageToFrontendView(data);
+      });
+    </script>
+  </head>
+  <body>
+    <iframe
+      id="webview-iframe"
+      frameborder="0"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads"
+      allow="cross-origin-isolated; autoplay; clipboard-read; clipboard-write"
+      src="__SERVER_URL__"
+    ></iframe>
+  </body>
+  <footer>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      #webview-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .outer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </footer>
+</html>
