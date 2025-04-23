@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vscode-webview-hmr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Support the development of VSCode WebView with Hot Module Replacement (HMR)",
   "keywords": [
     "vite",
