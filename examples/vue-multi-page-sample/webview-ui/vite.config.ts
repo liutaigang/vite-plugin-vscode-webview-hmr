@@ -24,14 +24,14 @@ const inframeConfig = {
     </script>`,
 };
 
-const nativeConfig = {
+const serveConfig = {
   logDir: "./log",
   linkDir: "src/assets",
 };
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vscodeWebviewHmr(nativeConfig)],
+  plugins: [vue(), vscodeWebviewHmr(serveConfig)],
   build: {
     outDir: "../out/webview",
     rollupOptions: {

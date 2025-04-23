@@ -43,7 +43,9 @@
     "build": "pnpm clean && tsup",
     "clean": "rimraf ./dist",
     "prettier": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "node-html-parser": "^6.1.13"
@@ -57,7 +59,8 @@
     "rimraf": "^6.0.1",
     "tsup": "7.2.0",
     "typescript": "~5.3.3",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "vitest": "^3.1.2"
   },
   "peerDependencies": {
     "vite": ">=2"

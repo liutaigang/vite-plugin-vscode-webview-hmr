@@ -1,15 +1,25 @@
-import { traverseHtmlElement } from "src/utils";
+import { traverseHtmlElement } from "../utils";
 
 export function handleServeIndexPath(indexHtml: string, serverUrlOrigin: string): string {
   return traverseHtmlElement(indexHtml, (element) => {
     const tagName = element.tagName;
-    const srcAttr = typeof element.getAttribute === "function" ? element.getAttribute("src") : null;
-    const hrefAttr = typeof element.getAttribute === "function" ? element.getAttribute("href") : null;
 
-    if (tagName === "SCRIPT" && srcAttr) {
-      element.setAttribute("src", join(serverUrlOrigin, srcAttr));
-    } else if (tagName === "LINK" && hrefAttr) {
-      element.setAttribute("href", join(serverUrlOrigin, hrefAttr));
+    if (tagName === "SCRIPT") {
+      const srcAttr = typeof element.getAttribute === "function" ? element.getAttribute("src") : null;
+      const scriptContent = element.innerText;
+      if (srcAttr) {
+        element.setAttribute("src", join(serverUrlOrigin, srcAttr));
+      } else if (scriptContent) {
+        element.textContent = scriptContent.replace(
+          /(["'])(\/).*(["'])/g,
+          (match) => `"${join(serverUrlOrigin, match.slice(1, -1))}"`,
+        );
+      }
+    } else if (tagName === "LINK") {
+      const hrefAttr = typeof element.getAttribute === "function" ? element.getAttribute("href") : null;
+      if (hrefAttr) {
+        element.setAttribute("href", join(serverUrlOrigin, hrefAttr));
+      }
     }
   });
 }
